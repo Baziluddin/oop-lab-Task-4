@@ -1,0 +1,156 @@
+// 24k-0559 Bazil-Uddin-Khan
+#include <iostream>
+#include<string>
+using namespace std;
+
+class Book
+{
+    private:
+    string Title;
+    double Price;
+    static int * Stock;
+    int Booknum;
+    
+    public:
+    Book()
+    {
+        Title = "Unknown";
+        Price = 0.0;
+        Booknum =0;
+        if(Stock == nullptr)
+        {
+            Stock = new int (30);
+            
+        }
+    }
+    
+    void Initialize(Book * book,int TotalBooks)
+    {
+        for(int i =0; i < TotalBooks;i++)
+        {
+            book[i].Title = "Unknown";
+            book[i].Price =0.0;
+        }
+        
+    }
+    
+    void SetAttributes(string NewTitle,double NewPrice)
+    {
+        Title = NewTitle;
+        Price = NewPrice;
+    }
+    
+    void UpdateBookDetails(int Booknum,Book * book,int Totalbooks)
+    {
+        for(int i =0; i < Totalbooks;i++)
+        {
+            if(i+1 == Booknum)
+            {
+                string NewTitle;
+                cout << " Enter New Title " << endl;
+                cin.ignore();
+                getline(cin,NewTitle);
+                
+                double NewPrice;
+                cout << " Enter New Price " << endl;
+                cin >> NewPrice;
+                book[i].SetAttributes(NewTitle,NewPrice);
+                
+                
+            }
+        }
+    }
+    
+    void TrackStockLevels()
+    {
+        if(*(Stock) < 5)
+        {
+            cout << " Low-Stock Warning " << endl;
+        }
+    }
+    
+    void SimulateBookPurchases(Book * book,int i)
+    {
+        if(*(Stock) != 0)
+        {
+            string Title;
+            cin.ignore();
+            
+            cout << " Enter Title of Book " << endl;
+            getline(cin,Title);
+        
+            double Price;
+            cout << " Enter Book price " << endl;
+            cin >> Price;
+            book[i].SetAttributes(Title,Price);
+            Booknum++;
+            (*Stock)--;
+        
+            
+        }
+        else
+        {
+            cout << " Sorry All Books Are been Purchased " <<  endl;
+            
+        }
+        
+    }
+    
+    string GetTitle()
+    {
+        return Title;
+    }
+    
+    double GetPrice()
+    {
+        return Price;
+    }
+    
+    void Display(Book * book,int TotalBooks)
+    {
+        for(int i =0; i < TotalBooks;i++)
+        {
+            cout << " Title of book " << i +1 << " is " << book[i].GetTitle() << endl;
+            cout << " Price of book " << i +1 << " is " << book[i].GetPrice() << endl;
+            
+        }
+        cout << " Capacity of Inventory system Still contains : " << *(Stock) << " Books " << endl;
+    }
+    ~Book()
+    {
+        if(Stock == nullptr)
+        {
+              delete Stock;
+            
+        }
+      
+    }
+    
+};
+
+int * Book :: Stock ;
+
+int main()
+{
+    cout << " Welcome To Bookstore Management System " << endl;
+    
+    int TotalBooks;
+    cout << " Enter Total Books  You want To purchase " << endl;
+    cin >> TotalBooks;
+    
+    Book * book = new Book[TotalBooks];
+    book->Initialize(book,TotalBooks);
+    
+    for(int i =0; i < TotalBooks;i++)
+    {
+        book[i].SimulateBookPurchases(book,i);
+        book[i].TrackStockLevels();
+    }
+    
+    book->Display(book,TotalBooks);
+    
+    
+    delete [] book;
+
+    return 0;
+}
